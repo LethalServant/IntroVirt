@@ -55,3 +55,5 @@ obj-x86_64-linux-gnu
 # ci
 
 .vagrant
+
+ansible/playbooks/roles/*/files
