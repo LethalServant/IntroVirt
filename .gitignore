@@ -51,3 +51,7 @@ debian/libintrovirt1/
 debian/tmp/
 obj-x86_64-linux-gnu
 
+
+# ci
+
+.vagrant
