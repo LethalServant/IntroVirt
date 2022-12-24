@@ -57,6 +57,10 @@
     cd /vagrant && \
     ./run-winserver2019.sh
   become: true
+  register: result
+- name: Print stderr
+  debug:
+    var: result.stderr_lines
 - name: VIRSH List
   shell:
     virsh list --all
