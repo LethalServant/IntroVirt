@@ -1,0 +1,71 @@
+---
+- name: Get the System Kernel
+  shell:
+    uname -r
+  register: result
+- name: Print System Kernel
+  debug:
+    var: result
+- name: Get HWE support status
+  shell:
+    hwe-support-status
+  register: result
+- name: Print HWE Support Status
+  debug:
+    var: result
+
+- name: Copy Introvirt dev deb
+  ansible.builtin.copy:
+    src: libintrovirt-0.57.3-Linux-libintrovirt-dev.deb
+    dest: /tmp/libintrovirt-0.57.3-Linux-libintrovirt-dev.deb
+  become: true
+- name: Install Introvirt dev deb
+  ansible.builtin.apt:
+    deb: /tmp/libintrovirt-0.57.3-Linux-libintrovirt-dev.deb
+  become: true
+
+- name: Copy Introvirt1 deb
+  ansible.builtin.copy:
+    src: libintrovirt-0.57.3-Linux-libintrovirt1.deb
+    dest: /tmp/libintrovirt-0.57.3-Linux-libintrovirt1.deb
+  become: true
+- name: Install Introvirt1 deb
+  ansible.builtin.apt:
+    deb: /tmp/libintrovirt-0.57.3-Linux-libintrovirt1.deb
+  become: true
+
+- name: Copy kvm Introvirt tools deb
+  ansible.builtin.copy:
+    src: libintrovirt-0.57.3-Linux-introvirt-tools.deb
+    dest: /tmp/libintrovirt-0.57.3-Linux-introvirt-tools.deb
+  become: true
+- name: Install kvm Introvirt tools deb
+  ansible.builtin.apt:
+    deb: /tmp/libintrovirt-0.57.3-Linux-introvirt-tools.deb
+  become: true
+
+- name: Run ivversion
+  shell:
+    ivversion
+  register: result
+  become: true
+- name: Print IVVersion
+  debug:
+    var: result
+- name: Start guest host
+  shell:
+    cd /vagrant && \
+    ./run-winserver2019.sh
+  become: true
+- name: VIRSH List
+  shell:
+    virsh list --all
+  become: true
+- name: Run ivguestinfo
+  shell:
+    ivguestinfo -D server2019_winser2019
+  become: true
+  register: result
+- name: Print print ivguestinfo results
+  debug:
+    var: result

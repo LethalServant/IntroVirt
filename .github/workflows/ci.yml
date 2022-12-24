@@ -60,6 +60,28 @@ jobs:
         with:
           name: introvirt_release_deb
           path: build/release/*.deb
+  Test_release:
+    runs-on: macos-12
+    needs: Release
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install Ansible via python
+        run: python3 -m pip install ansible
+      - name: Run MacOS System Checks
+        run: ./macos-system-checks.sh
+      - name: Download introvirt release debian packages
+        uses: actions/download-artifact@v3
+        with:
+          name: introvirt_release_deb
+          path: ansible/playbooks/roles/ivhost/files
+      - name: Check files
+        run: ls -R ansible/playbooks/roles/ivhost/files
+      - name: Build ivhost to test introvirt
+        run: |
+          cd vagrant/ivhost && \
+          vagrant up
+          vagrant status
 
   Debug:
     runs-on: ubuntu-20.04
@@ -91,3 +113,25 @@ jobs:
         with:
           name: introvirt_debug_deb
           path: build/debug/*.deb
+  Test_debug:
+    runs-on: macos-12
+    needs: Debug
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install Ansible via python
+        run: python3 -m pip install ansible
+      - name: Run MacOS System Checks
+        run: ./macos-system-checks.sh
+      - name: Download introvirt debug debian packages
+        uses: actions/download-artifact@v3
+        with:
+          name: introvirt_debug_deb
+          path: ansible/playbooks/roles/ivhost/files
+      - name: Check files
+        run: ls -R ansible/playbooks/roles/ivhost/files
+      - name: Build ivhost to test introvirt
+        run: |
+          cd vagrant/ivhost && \
+          vagrant up
+          vagrant status
