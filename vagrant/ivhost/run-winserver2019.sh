@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd guests/windows/server2019 && \
-vagrant up --provider=libvirt && \
+vagrant up --provider=libvirt --debug --no-tty&& \
 vagrant status
