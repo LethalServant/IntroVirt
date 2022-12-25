@@ -52,6 +52,16 @@
 - name: Print IVVersion
   debug:
     var: result
+
+- name: Get emulated nic
+  shell:
+    qemu-system-x86_64 -net nic,model=?
+  register: result
+  become: true
+- name: Print emulated nics
+  debug:
+    var: result.stdout_lines
+
 - name: Start guest host
   shell:
     cd /vagrant && \
